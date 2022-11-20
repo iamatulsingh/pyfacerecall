@@ -2,6 +2,11 @@
 
 [![ForTheBadge built-with-love](https://forthebadge.com//images/badges/built-with-love.svg)](https://github.com/iamatulsingh/)
 
+## Installation
+```bash
+pip install pyfacerecall
+```
+
 ## Generate own face dataset using camera
 You can use cli built-in cli tool to generate dataset of your own face using your camera. 
 ```bash
