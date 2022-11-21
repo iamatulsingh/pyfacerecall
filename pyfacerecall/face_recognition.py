@@ -94,13 +94,13 @@ class FaceRecognition:
         class_names = dict([(value, key) for key, value in class_names_reversed.items()])
         np.save(os.path.join(model_path, class_names_file), class_names)
 
-    @staticmethod
-    def load_saved_model(model_path):
+
+    def load_saved_model(self, model_path):
         model = load_model(model_path)
         return model
 
-    @staticmethod
-    def model_prediction(image_path, model_path):
+
+    def model_prediction(self, image_path, model_path):
         class_name = "None Class Name"
         face_array, face = get_detected_face(image_path)
         model = load_model(model_path)
