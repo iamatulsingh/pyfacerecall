@@ -25,6 +25,6 @@ if __name__ == '__main__':
     face_recognition.training()
     face_recognition.save_model(model_path)
     model = face_recognition.load_saved_model(model_path)
-    k, result = face_recognition.model_prediction(image_path, model_path)
+    k, result = face_recognition.model_prediction(image_path, model_path, need_cropping=False)
     print(f"detected class is {k} and prediction percentage is {result}")
 ```

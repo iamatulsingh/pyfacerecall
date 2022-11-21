@@ -1,4 +1,6 @@
 import os
+import cv2
+from PIL import Image
 import numpy as np
 import matplotlib.pyplot as plt
 from pyfacerecall.model import get_model
@@ -100,9 +102,15 @@ class FaceRecognition:
         return model
 
 
-    def model_prediction(self, image_path, model_path):
+    def model_prediction(self, image_path, model_path, need_cropping=True):
         class_name = "None Class Name"
-        face_array, face = get_detected_face(image_path)
+        if not need_cropping:
+            face = cv2.imread(image_path)
+            image = Image.fromarray(face)
+            image = image.resize((self.IMAGE_HEIGHT, self.IMAGE_WIDTH))
+            face_array = np.asarray(image)
+        else:
+            face_array, face = get_detected_face(image_path)
         model = load_model(model_path)
         face_array = face_array.astype('float32')
         input_sample = np.expand_dims(face_array, axis=0)
