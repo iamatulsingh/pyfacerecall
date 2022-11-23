@@ -7,6 +7,7 @@ from pyfacerecall.model import get_model
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras import optimizers
+from pathlib import Path
 
 from pyfacerecall.face_detection_operation import get_detected_face
 
@@ -90,14 +91,14 @@ class FaceRecognition:
         FaceRecognition.plot_training(history)
 
     def save_model(self, model_path):
-        self.model.save(model_path)
+        self.model.save(os.path.abspath(model_path))
         class_names = self.training_generator.class_indices
         class_names_file_reverse = "class_names_reverse.npy"
         class_names_file = "class_names.npy"
-        np.save(os.path.join(model_path, class_names_file_reverse), class_names)
-        class_names_reversed = np.load(os.path.join(model_path, class_names_file_reverse), allow_pickle=True).item()
+        np.save(os.path.join(os.path.abspath(model_path), class_names_file_reverse), class_names)
+        class_names_reversed = np.load(os.path.join(os.path.abspath(model_path), class_names_file_reverse), allow_pickle=True).item()
         class_names = dict([(value, key) for key, value in class_names_reversed.items()])
-        np.save(os.path.join(model_path, class_names_file), class_names)
+        np.save(os.path.join(os.path.abspath(model_path), class_names_file), class_names)
 
 
     def load_saved_model(self, model_path):
@@ -108,20 +109,20 @@ class FaceRecognition:
     def model_prediction(self, image_path, model_path, need_cropping=True):
         class_name = "None Class Name"
         if not need_cropping:
-            face = cv2.imread(image_path)
+            face = cv2.imread(os.path.abspath(image_path))
             image = Image.fromarray(face)
             image = image.resize((self.IMAGE_HEIGHT, self.IMAGE_WIDTH))
             face_array = np.asarray(image)
         else:
-            face_array, face = get_detected_face(image_path)
-        model = load_model(model_path)
+            face_array, face = get_detected_face(os.path.abspath(image_path))
+        model = load_model(os.path.abspath(model_path))
         face_array = face_array.astype('float32')
         input_sample = np.expand_dims(face_array, axis=0)
         result = model.predict(input_sample)
         best_result = np.argmax(result, axis=1)
         index = best_result[0]
 
-        classes = np.load(os.path.join(model_path, "class_names.npy"), allow_pickle=True).item()
+        classes = np.load(os.path.join(os.path.abspath(model_path), "class_names.npy"), allow_pickle=True).item()
         # print(classes, type(classes), classes.items())
         if type(classes) is dict:
             for k, v in classes.items():
@@ -132,7 +133,7 @@ class FaceRecognition:
 
 
     def realtime_prediction(self, src, model_path, need_cropping=True):
-        classes = np.load(os.path.join(model_path, "class_names.npy"), allow_pickle=True).item()
+        classes = np.load(os.path.join(os.path.abspath(model_path), "class_names.npy"), allow_pickle=True).item()
         class_name = "None Class Name"
         cap = cv2.VideoCapture(src)
         if not cap.isOpened():
