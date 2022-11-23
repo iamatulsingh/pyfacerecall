@@ -145,7 +145,7 @@ class FaceRecognition:
                 image = image.resize((self.IMAGE_HEIGHT, self.IMAGE_WIDTH))
                 face_array = np.asarray(image)
             else:
-                face_array, face = get_detected_face(face)
+                face_array, _ = get_detected_face(frame)
             model = load_model(model_path)
             face_array = face_array.astype('float32')
             input_sample = np.expand_dims(face_array, axis=0)
