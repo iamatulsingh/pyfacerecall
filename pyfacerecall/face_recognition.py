@@ -13,7 +13,7 @@ from pyfacerecall.face_detection_operation import get_detected_face
 
 class FaceRecognition:
 
-    def __init__(self, training_path="", testing_path=""):
+    def __init__(self, training_path="", testing_path="", number_of_classes=0):
         self.TRAINING_DATA_DIRECTORY = training_path
         self.TESTING_DATA_DIRECTORY = testing_path
         self.EPOCHS = 50
@@ -22,8 +22,11 @@ class FaceRecognition:
         self.NUMBER_OF_TESTING_IMAGES = 24
         self.IMAGE_HEIGHT = 224
         self.IMAGE_WIDTH = self.IMAGE_HEIGHT
-        self.OUTPUT_LAYERS = len([name for name in 
-          os.listdir(self.TRAINING_DATA_DIRECTORY) if not os.path.isfile(name)])
+        if not number_of_classes:
+            self.OUTPUT_LAYERS = len([name for name in 
+            os.listdir(self.TRAINING_DATA_DIRECTORY) if not os.path.isfile(name)])
+        else:
+            self.OUTPUT_LAYERS = number_of_classes
         self.model = get_model(self.IMAGE_HEIGHT, self.OUTPUT_LAYERS)
         self.training_generator = None
 

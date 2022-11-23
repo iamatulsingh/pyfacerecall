@@ -7,4 +7,4 @@ if __name__ == '__main__':
     # for training
     face_recognition = FaceRecognition("./dataset/training", "./dataset/testing")
     # after you have your model
-    # face_recognition = FaceRecognition()
+    # face_recognition = FaceRecognition(number_of_classes=2)

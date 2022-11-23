@@ -22,7 +22,7 @@ if __name__ == '__main__':
     model_path = "model"
     image_path = 'test.jpeg'
     # if you already have model trained then no need to provide dataset path while initializing class like below
-    # face_recognition = FaceRecognition()
+    # face_recognition = FaceRecognition(number_of_classes=2)
     face_recognition = FaceRecognition("./dataset/training", "./dataset/testing")
     face_recognition.training()
     face_recognition.save_model(model_path)
