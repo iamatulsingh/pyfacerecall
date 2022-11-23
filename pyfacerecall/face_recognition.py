@@ -13,7 +13,7 @@ from pyfacerecall.face_detection_operation import get_detected_face
 
 class FaceRecognition:
 
-    def __init__(self, training_path, testing_path):
+    def __init__(self, training_path="", testing_path=""):
         self.TRAINING_DATA_DIRECTORY = training_path
         self.TESTING_DATA_DIRECTORY = testing_path
         self.EPOCHS = 50
