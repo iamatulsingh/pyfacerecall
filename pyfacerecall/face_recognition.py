@@ -126,3 +126,34 @@ class FaceRecognition:
                     class_name = v
 
         return class_name, result
+
+
+    def realtime_prediction(self, src, model_path, need_cropping=True):
+        classes = np.load(os.path.join(model_path, "class_names.npy"), allow_pickle=True).item()
+        class_name = "None Class Name"
+        cap = cv2.VideoCapture(src)
+        if not cap.isOpened():
+            print("Error opening video source")
+        while cap.isOpened():
+            ret, frame = cap.read()
+            if not need_cropping:
+                image = Image.fromarray(frame)
+                image = image.resize((self.IMAGE_HEIGHT, self.IMAGE_WIDTH))
+                face_array = np.asarray(image)
+            else:
+                face_array, face = get_detected_face(face)
+            model = load_model(model_path)
+            face_array = face_array.astype('float32')
+            input_sample = np.expand_dims(face_array, axis=0)
+            result = model.predict(input_sample)
+            best_result = np.argmax(result, axis=1)
+            index = best_result[0]
+
+            # print(classes, type(classes), classes.items())
+            if type(classes) is dict:
+                for k, v in classes.items():
+                    if k == index:
+                        class_name = v
+
+            print(class_name, result)
+        cap.release()

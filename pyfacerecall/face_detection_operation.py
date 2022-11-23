@@ -52,7 +52,9 @@ def save_cropped_face(images_root_folder, cropped_folder,
 
 
 def get_detected_face(filename, required_size=(224, 224)):
-    img = cv2.imread(filename)
+    img = filename
+    if isinstance(filename, str):
+        img = cv2.imread(filename)
     detector = mtcnn.MTCNN()
     results = detector.detect_faces(img)
     x, y, width, height = results[0]['box']
